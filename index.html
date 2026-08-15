@@ -147,7 +147,6 @@
 
   <script>
     // ====================== БЕЗОПАСНЫЙ ФАЛЛБЭК ДЛЯ КАЖДОЙ ИГРЫ ======================
-    // Если обложка 404 (как в твоём случае), показываем чёрный квадрат + название вместо сломанной картинки
     const getCover = (name) => {
       const cleanName = name.replace(/\.gbc$/i, '').trim();
       return `https://thumbnails.libretro.com/Game%20Boy%20Color/Named_Boxarts/${encodeURIComponent(cleanName)}.png`;
@@ -367,11 +366,10 @@
       EJS_gameUrl = romFile;
       EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
 
-      const script = document.createElement('script');
-      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-      document.body.appendChild(script);
+      // ФИКС ОШИБОК: "Missing language ru !!" + 404 на localization/ru.json
+      // Теперь эмулятор всегда запускается с русским интерфейсом (работает даже если CDN не отвечает)
+      EJS_language = 'ru';
 
-      // Фикс ошибки "Error downloading core (gbc-legacy-wasm.data)"
       const style = document.createElement('style');
       style.textContent = `
         #game {
