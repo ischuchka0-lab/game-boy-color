@@ -152,9 +152,9 @@
     const getCover = (name) =>
       `https://thumbnails.libretro.com/Nintendo%20-%20Game%20Boy%20Color/Named_Boxarts/${encodeURIComponent(name)}.png`;
 
-    // ----- ПОЛНЫЙ СПИСОК ИГР (из ваших фотографий) -----
+    // ----- ПОЛНЫЙ СПИСОК ИГР (все 180+ записей из ваших скриншотов) -----
     const GAMES_LIST = [
-      // --- страница 1 ---
+      // страница 1
       { title: "Village", rom: "001 Village.gbc", core: "gbc", cover: getCover("Village (USA)") },
       { title: "Dragon Quest 1+2", rom: "002 Dragon Quest 1+2.gbc", core: "gbc", cover: getCover("Dragon Warrior I & II (USA)") },
       { title: "Jack Long", rom: "003 Jack Long.gbc", core: "gbc", cover: getCover("Jack Long (USA)") },
@@ -182,8 +182,7 @@
       { title: "Motocross", rom: "023 Motocross.gbc", core: "gbc", cover: getCover("Motocross (USA)") },
       { title: "R-Type DX", rom: "024 R type DX.gbc", core: "gbc", cover: getCover("R-Type DX (USA)") },
       { title: "Bomb Superman MAX - Brave Light", rom: "025 Bomb Superman MAX-Brave Light.g...", core: "gbc", cover: getCover("Bomberman Max - Blue Champion (USA)") },
-
-      // --- страница 2 ---
+      // страница 2
       { title: "Bomb Superman MAX - Dark Warrior", rom: "026 Bomb Superman MAX-Dark Warrior...", core: "gbc", cover: getCover("Bomberman Max - Red Challenger (USA)") },
       { title: "Bomb Superman MAX - AIN", rom: "027 Bomb Superman MAX-AIN.gbc", core: "gbc", cover: getCover("Bomberman Max - Red Challenger (USA)") },
       { title: "Bomber", rom: "028 Bomber.gbc", core: "gbc", cover: getCover("Bomber (USA)") },
@@ -212,8 +211,7 @@
       { title: "Austin Regime", rom: "051 Austin Regime.gbc", core: "gbc", cover: getCover("Austin Regime (USA)") },
       { title: "Magic Tower 3", rom: "052 Magic tower3.gbc", core: "gbc", cover: getCover("Magic Tower 3 (USA)") },
       { title: "Barbie Pet Rescue", rom: "053 Barbie pet rescue.gbc", core: "gbc", cover: getCover("Barbie - Pet Rescue (USA)") },
-
-      // --- страница 3 ---
+      // страница 3
       { title: "Impossible Mission", rom: "054 Impossible mission.gbc", core: "gbc", cover: getCover("Impossible Mission (USA)") },
       { title: "The Return of Batman Joker", rom: "055 The Return of Batman Joker.gbc", core: "gbc", cover: getCover("Batman Beyond - Return of the Joker (USA)") },
       { title: "Battle of Way Island 1942", rom: "056 Battle of Way Island in 1942.gbc", core: "gbc", cover: getCover("1942 (USA)") },
@@ -240,8 +238,7 @@
       { title: "Earth Destruction 2", rom: "077 Earth destruction 2.gbc", core: "gbc", cover: getCover("Earth Destruction 2 (USA)") },
       { title: "Magic Hero 22", rom: "078 Magic Hero 22.gbc", core: "gbc", cover: getCover("Magic Hero 22 (USA)") },
       { title: "Road Frog", rom: "079 Road Frog.gbc", core: "gbc", cover: getCover("Road Frog (USA)") },
-
-      // --- страница 4 ---
+      // страница 4
       { title: "All Star Tennis 2000", rom: "085. All Star Tennis 2000.gbc", core: "gbc", cover: getCover("All Star Tennis 2000 (USA)") },
       { title: "Bomberman Max - Blue Champion", rom: "086. Bomberman Max - Blue Champion...", core: "gbc", cover: getCover("Bomberman Max - Blue Champion (USA)") },
       { title: "Bomberman Max - Red Challenger", rom: "087. Bomberman Max - Red Challenger...", core: "gbc", cover: getCover("Bomberman Max - Red Challenger (USA)") },
@@ -268,8 +265,7 @@
       { title: "All-Star Baseball 2001", rom: "1714. All-Star Baseball 2001.gbc", core: "gbc", cover: getCover("All-Star Baseball 2001 (USA)") },
       { title: "Alone in the Dark - The New Nightmare", rom: "1715. Alone in the Dark - The New Night...", core: "gbc", cover: getCover("Alone in the Dark - The New Nightmare (USA)") },
       { title: "Animorphs", rom: "1716. Animorphs.gbc", core: "gbc", cover: getCover("Animorphs (USA)") },
-
-      // --- страница 5 ---
+      // страница 5
       { title: "Antz Racing", rom: "1717. Antz Racing.gbc", core: "gbc", cover: getCover("Antz Racing (USA)") },
       { title: "Army Men - Air Combat", rom: "1718. Army Men - Air Combat.gbc", core: "gbc", cover: getCover("Army Men - Air Combat (USA)") },
       { title: "Army Men - Sarge's Heroes 2", rom: "1719. Army Men - Sarge's Heroes 2.gbc", core: "gbc", cover: getCover("Army Men - Sarge's Heroes 2 (USA)") },
@@ -295,8 +291,7 @@
       { title: "Hot Wheels - Stunt Track Driver", rom: "1740. Hot Wheels - Stunt Track Driver.gbc", core: "gbc", cover: getCover("Hot Wheels - Stunt Track Driver (USA)") },
       { title: "Bubble Bobble", rom: "1741. Bubble Bobble.gbc", core: "gbc", cover: getCover("Bubble Bobble (USA)") },
       { title: "Burger Burger Pocket", rom: "1742. Burger Burger Pocket.gbc", core: "gbc", cover: getCover("Burger Burger Pocket (USA)") },
-
-      // --- страница 6 ---
+      // страница 6
       { title: "Burger Paradise", rom: "1743. Burger Paradise.gbc", core: "gbc", cover: getCover("Burger Paradise (USA)") },
       { title: "Centipede", rom: "1744. Centipede.gbc", core: "gbc", cover: getCover("Centipede (USA)") },
       { title: "The Simpsons - Night of the Living", rom: "1745. Simpsons, The - Night of the Living...", core: "gbc", cover: getCover("Simpsons, The - Night of the Living (USA)") },
@@ -324,8 +319,7 @@
       { title: "Front Row", rom: "1768. Front Row.gbc", core: "gbc", cover: getCover("Front Row (USA)") },
       { title: "Galaga - Destination Earth", rom: "1769. Galaga - Destination Earth.gbc", core: "gbc", cover: getCover("Galaga - Destination Earth (USA)") },
       { title: "Ghosts 'N Goblins", rom: "1770. Ghosts 'N Goblins.gbc", core: "gbc", cover: getCover("Ghosts 'N Goblins (USA)") },
-
-      // --- страница 7 ---
+      // страница 7
       { title: "Godzilla - The Series - Monster Wars", rom: "1771. Godzilla - The Series - Monster War...", core: "gbc", cover: getCover("Godzilla - The Series - Monster Wars (USA)") },
       { title: "Grand Theft Auto", rom: "1772. Grand Theft Auto.gbc", core: "gbc", cover: getCover("Grand Theft Auto (USA)") },
       { title: "Grand Theft Auto 2", rom: "1773. Grand Theft Auto 2.gbc", core: "gbc", cover: getCover("Grand Theft Auto 2 (USA)") },
@@ -348,7 +342,7 @@
       { title: "102 Dalmatians a la Rescousse", rom: "1704. 102 Dalmatians a la Rescousse.gbc", core: "gbc", cover: getCover("102 Dalmatians - Puppies to the Rescue (USA)") },
     ];
 
-    // ----- ЛОГИКА ОТОБРАЖЕНИЯ (с исправленным путём к данным) -----
+    // ----- ЛОГИКА ОТОБРАЖЕНИЯ с локальным эмулятором -----
     const urlParams = new URLSearchParams(window.location.search);
     const romFile = urlParams.get('rom');
     const coreName = urlParams.get('core') || 'gbc';
@@ -361,14 +355,22 @@
       document.getElementById('back-btn').style.display = 'inline-block';
       document.getElementById('page-title').innerText = gameTitle;
 
-      // ***** ИСПРАВЛЕННЫЙ ПУТЬ К ДАННЫМ EmulatorJS *****
+      // Настройка эмулятора – все файлы лежат в папке data/
       EJS_player = '#game';
-      EJS_core = coreName;
+      EJS_core = coreName; // можно заменить на 'gb', если ядро gbc не работает
       EJS_gameUrl = romFile;
-      EJS_pathtodata = 'https://cdn.emulatorjs.org/data/';   // убрали /stable/
+      EJS_pathtodata = 'data/'; // указываем локальную папку
 
+      // Загружаем loader.js из локальной папки data
       const script = document.createElement('script');
-      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      script.src = 'data/loader.js';
+      // Если локальный файл не загрузился, пробуем CDN (на всякий случай, но вряд ли поможет)
+      script.onerror = function() {
+        console.warn('Не удалось загрузить локальный loader.js, пробуем CDN...');
+        const fallback = document.createElement('script');
+        fallback.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+        document.body.appendChild(fallback);
+      };
       document.body.appendChild(script);
     } else {
       renderGames(GAMES_LIST);
