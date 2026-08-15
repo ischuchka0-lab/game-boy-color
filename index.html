@@ -147,12 +147,10 @@
 
   <script>
     // ====================== ДИРЕКТНЫЕ ССЫЛКИ НА ОБЛОЖКИ С ИНТЕРНЕТА ======================
-    // Теперь у КАЖДОЙ игры есть своя реальная картинка[](https://thumbnails.libretro.com)
-    // Если картинка не найдётся — fallback (чёрный квадрат + название)
     const getCover = (name) => {
       const cleanName = name.replace(/\.gbc$/i, '').trim();
       const system = "Nintendo%20-%20Game%20Boy%20Color";
-      const encoded = encodeURIComponent(cleanName).replace(/%20/g, '%20'); // чистая замена пробелов
+      const encoded = encodeURIComponent(cleanName).replace(/%20/g, '%20');
       return `https://thumbnails.libretro.com/${system}/Named_Boxarts/${encoded}.png`;
     };
 
@@ -370,7 +368,6 @@
       EJS_gameUrl = romFile;
       EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
 
-      // ФИКС всех ошибок (missing language ru + core download)
       EJS_language = 'ru';
 
       const style = document.createElement('style');
