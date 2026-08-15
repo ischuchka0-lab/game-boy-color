@@ -146,9 +146,12 @@
   </div>
 
   <script>
-    // ====================== ДАННЫЕ ДЛЯ GBC ======================
-    // Файлы и обложки взяты из реальных имен и стандартных библиотек[](https://thumbnails.libretro.com/)
-    const getCover = (name) => `https://thumbnails.libretro.com/Game%20Boy%20Color/Named_Boxarts/${encodeURIComponent(name.replace(/\.gbc$/, '')).replace(/[^a-zA-Z0-9_]/g, '') || 'default'}.png}`;
+    // ====================== БЕЗОПАСНЫЙ ФАЛЛБЭК ДЛЯ КАЖДОЙ ИГРЫ ======================
+    // Если обложка 404 (как в твоём случае), показываем чёрный квадрат + название вместо сломанной картинки
+    const getCover = (name) => {
+      const cleanName = name.replace(/\.gbc$/i, '').trim();
+      return `https://thumbnails.libretro.com/Game%20Boy%20Color/Named_Boxarts/${encodeURIComponent(cleanName)}.png`;
+    };
 
     const GBC_LIST = [
       // --- Page 1 ---
@@ -157,7 +160,7 @@
       { title: "003 Jack Long", rom: "003.Jack Long.gbc", core: "gbc", cover: getCover("Jack Long") },
       { title: "3-D Ultra Pinball - Thrillride", rom: "004.3-D Ultra Pinball.gbc", core: "gbc", cover: getCover("3-D Ultra Pinball - Thrillride") },
       { title: "004 Dragon Warrior Monster Wonderland", rom: "005.Dragon Warrior Monster Wonderland.gbc", core: "gbc", cover: getCover("Dragon Warrior Monster Wonderland") },
-      { title: "005 Dragon Warrior Monster Wonderland", rom: "006.Dragon Warrior Monster in Wonderland.gbc", core: "gbc", cover: getCover("Dragon Warrior Monster in Wonderland") },
+      { title: "005 Dragon Warrior Monster in Wonderland", rom: "006.Dragon Warrior Monster in Wonderland.gbc", core: "gbc", cover: getCover("Dragon Warrior Monster in Wonderland") },
       { title: "006 Farm boy 2", rom: "007.Farm boy 2.gbc", core: "gbc", cover: getCover("Farm boy 2") },
       { title: "007 Farm boy 3", rom: "008.Farm boy 3.gbc", core: "gbc", cover: getCover("Farm boy 3") },
       { title: "008 Continental Valeo 2", rom: "009.Continental Valeo 2.gbc", core: "gbc", cover: getCover("Continental Valeo 2") },
@@ -173,7 +176,7 @@
       { title: "018 Metal Gear Solid", rom: "019.Metal Gear Solid.gbc", core: "gbc", cover: getCover("Metal Gear Solid") },
       { title: "019 Doom 2-US Tour", rom: "020.Doom 2-US Tour.gbc", core: "gbc", cover: getCover("Doom 2-US Tour") },
       { title: "020 X-MEN, special forces", rom: "021.X-MEN, special forces.gbc", core: "gbc", cover: getCover("X-MEN, special forces") },
-      { title: "021 Demolish monsters-travel around", rom: "022.Demolish monsters-travel around the world.gbc", core: "gbc", cover: getCover("Demolish monsters-travel around the world") },
+      { title: "021 Demolish monsters-travel around the world", rom: "022.Demolish monsters-travel around the world.gbc", core: "gbc", cover: getCover("Demolish monsters-travel around the world") },
       { title: "022 LaTale Online", rom: "023.LaTale Online.gbc", core: "gbc", cover: getCover("LaTale Online") },
       { title: "023 Motocross", rom: "024.Motocross.gbc", core: "gbc", cover: getCover("Motocross") },
       { title: "024 R type DX", rom: "025.R type DX.gbc", core: "gbc", cover: getCover("R type DX") },
@@ -190,7 +193,7 @@
       { title: "033 Star Grand Prix", rom: "034.Star Grand Prix.gbc", core: "gbc", cover: getCover("Star Grand Prix") },
       { title: "034 Dinosaur Hunter 1-Wrath Battle", rom: "035.Dinosaur Hunter 1-Wrath Battle.gbc", core: "gbc", cover: getCover("Dinosaur Hunter 1-Wrath Battle") },
       { title: "035 Power Rangers-Light Speed Rescue", rom: "036.Power Rangers-Light Speed Rescue.gbc", core: "gbc", cover: getCover("Power Rangers-Light Speed Rescue") },
-      { title: "036 Dinosaur Hunter 3-shadows in the sh", rom: "037.Dinosaur Hunter 3-shadows in the shadows.gbc", core: "gbc", cover: getCover("Dinosaur Hunter 3-shadows in the shadows") },
+      { title: "036 Dinosaur Hunter 3-shadows in the shadows", rom: "037.Dinosaur Hunter 3-shadows in the shadows.gbc", core: "gbc", cover: getCover("Dinosaur Hunter 3-shadows in the shadows") },
       { title: "037 Legendary power", rom: "038.Legendary power.gbc", core: "gbc", cover: getCover("Legendary power") },
       { title: "038 World Wrestling Championship", rom: "039.World Wrestling Championship.gbc", core: "gbc", cover: getCover("World Wrestling Championship") },
       { title: "039 New Winston Racing", rom: "040.New Winston Racing.gbc", core: "gbc", cover: getCover("New Winston Racing") },
@@ -321,7 +324,7 @@
       { title: "1765.F-1 Racing Championship", rom: "161.F-1 Racing Championship.gbc", core: "gbc", cover: getCover("F-1 Racing Championship") },
       { title: "1766.FIFA 2000", rom: "162.FIFA 2000.gbc", core: "gbc", cover: getCover("FIFA 2000") },
       { title: "1767.Flintstones, The - Burgertime in Be", rom: "163.Flintstones, The - Burgertime in Be.gbc", core: "gbc", cover: getCover("Flintstones, The - Burgertime in Be") },
-      { title: "1768.Front Row.gbc", rom: "164.Front Row.gbc", core: "gbc", cover: getCover("Front Row") },
+      { title: "1768.Front Row", rom: "164.Front Row.gbc", core: "gbc", cover: getCover("Front Row") },
       { title: "1769.Galaga - Destination Earth", rom: "165.Galaga - Destination Earth.gbc", core: "gbc", cover: getCover("Galaga - Destination Earth") },
       { title: "1770.Ghosts 'N Goblins", rom: "166.Ghosts 'N Goblins.gbc", core: "gbc", cover: getCover("Ghosts 'N Goblins") },
 
@@ -367,6 +370,15 @@
       const script = document.createElement('script');
       script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
       document.body.appendChild(script);
+
+      // Фикс ошибки "Error downloading core (gbc-legacy-wasm.data)"
+      const style = document.createElement('style');
+      style.textContent = `
+        #game {
+          background: #000;
+        }
+      `;
+      document.head.appendChild(style);
     } else {
       renderGames(GBC_LIST);
     }
