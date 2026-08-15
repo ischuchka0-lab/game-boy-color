@@ -1,91 +1,403 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mortal Kombat 3 - Special 56 Peoples</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GBC Retro Games Collection</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+    h1 {
+      margin-bottom: 16px;
+      font-size: 1.8rem;
+      text-align: center;
+    }
+    .search-box {
+      width: 100%;
+      max-width: 400px;
+      padding: 12px 16px;
+      margin-bottom: 24px;
+      border-radius: 20px;
+      border: 1px solid #333;
+      background: #1e1e1e;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .search-box:focus {
+      border-color: #0088cc;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 1000px;
+    }
+    .game-card {
+      background-color: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      overflow: hidden;
+      text-decoration: none;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    }
+    .game-card:hover {
+      transform: translateY(-4px);
+      border-color: #0088cc;
+      box-shadow: 0 6px 16px rgba(0, 136, 204, 0.3);
+    }
+    
+    .img-container {
+      width: 100%;
+      height: 130px;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+      padding: 8px;
+      box-sizing: border-box;
+    }
 
-        body {
-            background-color: #050505;
-            color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
+    .fallback-title {
+      color: #94a3b8;
+      font-size: 11px;
+      text-align: center;
+      font-weight: 600;
+      line-height: 1.2;
+      word-break: break-word;
+    }
 
-        h1 {
-            margin-bottom: 15px;
-            font-size: 24px;
-            letter-spacing: 2px;
-            color: #e50914;
-            text-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
-            text-transform: uppercase;
-        }
+    .game-card img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #1e1e1e;
+    }
 
-        /* Контейнер эмулятора */
-        .emulator-holder {
-            width: 640px;
-            height: 480px;
-            max-width: 100%;
-            border: 3px solid #333;
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            background-color: #000;
-        }
+    .img-error {
+      display: none !important;
+    }
 
-        #game {
-            width: 100%;
-            height: 100%;
-        }
-
-        .controls-hint {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #888;
-            text-align: center;
-        }
-
-        .controls-hint span {
-            color: #fff;
-            background: #222;
-            padding: 2px 6px;
-            border-radius: 4px;
-            border: 1px solid #444;
-        }
-    </style>
+    .game-card .title {
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+      line-height: 1.2;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    #emulator-container {
+      width: 640px;
+      height: 480px;
+      max-width: 95vw;
+      max-height: 75vh;
+      border: 2px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      display: none;
+    }
+    .back-btn {
+      display: none;
+      margin-bottom: 16px;
+      padding: 8px 16px;
+      background: #0088cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Mortal Kombat 3 (56 Peoples)</h1>
+  <h1 id="page-title">GBC Retro Games Collection</h1>
+  <a href="index.html" id="back-btn" class="back-btn">← К списку игр</a>
 
-    <div class="emulator-holder">
-        <div id="game"></div>
-    </div>
+  <input type="text" id="search" class="search-box" placeholder="🔍 Поиск игры..." oninput="filterGames()">
 
-    <div class="controls-hint">
-        Управление: <span>Стрелки</span> — Движение | <span>Z</span> — A | <span>X</span> — B | <span>Enter</span> — Start | <span>Shift</span> — Select
-    </div>
+  <div id="games-menu" class="games-grid"></div>
 
-    <!-- Подключаем эмулятор EmulatorJS -->
-    <script type="text/javascript">
-        // Настройки эмулятора
-        EJS_player = '#game';
-        EJS_core = 'nes'; // Ядро для NES / Dendy
-        EJS_gameUrl = 'Mortal Kombat 3 - Special 56 Peoples [p1].nes'; // Твой файл игры
-        EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/'; // Данные движка из CDN
-    </script>
-    <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+  <div id="emulator-container">
+    <div id="game"></div>
+  </div>
+
+  <script>
+    // ====================== ДАННЫЕ ДЛЯ GBC ======================
+    // Файлы и обложки взяты из реальных имен и стандартных библиотек[](https://thumbnails.libretro.com/)
+    const getCover = (name) => `https://thumbnails.libretro.com/Game%20Boy%20Color/Named_Boxarts/${encodeURIComponent(name.replace(/\.gbc$/, '')).replace(/[^a-zA-Z0-9_]/g, '') || 'default'}.png}`;
+
+    const GBC_LIST = [
+      // --- Page 1 ---
+      { title: "001 Village", rom: "001.Village.gbc", core: "gbc", cover: getCover("Village") },
+      { title: "002 Dragon Quest 1+2", rom: "002.Dragon Quest 1+2.gbc", core: "gbc", cover: getCover("Dragon Quest 1+2") },
+      { title: "003 Jack Long", rom: "003.Jack Long.gbc", core: "gbc", cover: getCover("Jack Long") },
+      { title: "3-D Ultra Pinball - Thrillride", rom: "004.3-D Ultra Pinball.gbc", core: "gbc", cover: getCover("3-D Ultra Pinball - Thrillride") },
+      { title: "004 Dragon Warrior Monster Wonderland", rom: "005.Dragon Warrior Monster Wonderland.gbc", core: "gbc", cover: getCover("Dragon Warrior Monster Wonderland") },
+      { title: "005 Dragon Warrior Monster Wonderland", rom: "006.Dragon Warrior Monster in Wonderland.gbc", core: "gbc", cover: getCover("Dragon Warrior Monster in Wonderland") },
+      { title: "006 Farm boy 2", rom: "007.Farm boy 2.gbc", core: "gbc", cover: getCover("Farm boy 2") },
+      { title: "007 Farm boy 3", rom: "008.Farm boy 3.gbc", core: "gbc", cover: getCover("Farm boy 3") },
+      { title: "008 Continental Valeo 2", rom: "009.Continental Valeo 2.gbc", core: "gbc", cover: getCover("Continental Valeo 2") },
+      { title: "009 Continental Valeo3", rom: "010.Continental Valeo3.gbc", core: "gbc", cover: getCover("Continental Valeo3") },
+      { title: "010 Pin Bowling", rom: "011.10-Pin Bowling.gbc", core: "gbc", cover: getCover("10-Pin Bowling") },
+      { title: "011 The Legend of Sada-Time and Space", rom: "012.The Legend of Sada-Time and Space.gbc", core: "gbc", cover: getCover("The Legend of Sada-Time and Space") },
+      { title: "012 The Legend of Sada-Earth", rom: "013.The Legend of Sada-Earth.gbc", core: "gbc", cover: getCover("The Legend of Sada-Earth") },
+      { title: "013 Finger wheel", rom: "014.Finger wheel.gbc", core: "gbc", cover: getCover("Finger wheel") },
+      { title: "014 Shrek", rom: "015.Shrek.gbc", core: "gbc", cover: getCover("Shrek") },
+      { title: "015 Rockman 2", rom: "016.Rockman 2.gbc", core: "gbc", cover: getCover("Rockman 2") },
+      { title: "016 Biochemical Commander-Ultimate Soccer", rom: "017.Biochemical Commander-Ultimate Soccer.gbc", core: "gbc", cover: getCover("Biochemical Commander-Ultimate Soccer") },
+      { title: "017 war front line", rom: "018.war front line.gbc", core: "gbc", cover: getCover("war front line") },
+      { title: "018 Metal Gear Solid", rom: "019.Metal Gear Solid.gbc", core: "gbc", cover: getCover("Metal Gear Solid") },
+      { title: "019 Doom 2-US Tour", rom: "020.Doom 2-US Tour.gbc", core: "gbc", cover: getCover("Doom 2-US Tour") },
+      { title: "020 X-MEN, special forces", rom: "021.X-MEN, special forces.gbc", core: "gbc", cover: getCover("X-MEN, special forces") },
+      { title: "021 Demolish monsters-travel around", rom: "022.Demolish monsters-travel around the world.gbc", core: "gbc", cover: getCover("Demolish monsters-travel around the world") },
+      { title: "022 LaTale Online", rom: "023.LaTale Online.gbc", core: "gbc", cover: getCover("LaTale Online") },
+      { title: "023 Motocross", rom: "024.Motocross.gbc", core: "gbc", cover: getCover("Motocross") },
+      { title: "024 R type DX", rom: "025.R type DX.gbc", core: "gbc", cover: getCover("R type DX") },
+      { title: "025 Bomb Superman MAX-Brave Light", rom: "026.Bomb Superman MAX-Brave Light.gbc", core: "gbc", cover: getCover("Bomb Superman MAX-Brave Light") },
+
+      // --- Page 2 ---
+      { title: "026 Bomb Superman MAX-Dark Warrior", rom: "027.Bomb Superman MAX-Dark Warrior.gbc", core: "gbc", cover: getCover("Bomb Superman MAX-Dark Warrior") },
+      { title: "027 Bomb Superman MAX-AIN", rom: "028.Bomb Superman MAX-AIN.gbc", core: "gbc", cover: getCover("Bomb Superman MAX-AIN") },
+      { title: "028 Bomber", rom: "029.Bomber.gbc", core: "gbc", cover: getCover("Bomber") },
+      { title: "029 Motocross 2", rom: "030.Motocross 2.gbc", core: "gbc", cover: getCover("Motocross 2") },
+      { title: "030 Tetris", rom: "031.Tetris.gbc", core: "gbc", cover: getCover("Tetris") },
+      { title: "031 DisneyLand", rom: "032.DisneyLand.gbc", core: "gbc", cover: getCover("DisneyLand") },
+      { title: "032 The Martian Elba", rom: "033.The Martian Elba.gbc", core: "gbc", cover: getCover("The Martian Elba") },
+      { title: "033 Star Grand Prix", rom: "034.Star Grand Prix.gbc", core: "gbc", cover: getCover("Star Grand Prix") },
+      { title: "034 Dinosaur Hunter 1-Wrath Battle", rom: "035.Dinosaur Hunter 1-Wrath Battle.gbc", core: "gbc", cover: getCover("Dinosaur Hunter 1-Wrath Battle") },
+      { title: "035 Power Rangers-Light Speed Rescue", rom: "036.Power Rangers-Light Speed Rescue.gbc", core: "gbc", cover: getCover("Power Rangers-Light Speed Rescue") },
+      { title: "036 Dinosaur Hunter 3-shadows in the sh", rom: "037.Dinosaur Hunter 3-shadows in the shadows.gbc", core: "gbc", cover: getCover("Dinosaur Hunter 3-shadows in the shadows") },
+      { title: "037 Legendary power", rom: "038.Legendary power.gbc", core: "gbc", cover: getCover("Legendary power") },
+      { title: "038 World Wrestling Championship", rom: "039.World Wrestling Championship.gbc", core: "gbc", cover: getCover("World Wrestling Championship") },
+      { title: "039 New Winston Racing", rom: "040.New Winston Racing.gbc", core: "gbc", cover: getCover("New Winston Racing") },
+      { title: "040 Monsters, Inc.", rom: "041.Monsters, Inc..gbc", core: "gbc", cover: getCover("Monsters, Inc.") },
+      { title: "041 Solomon Key", rom: "042.Solomon Key.gbc", core: "gbc", cover: getCover("Solomon Key") },
+      { title: "042 Star baseball2001", rom: "043.Star baseball2001.gbc", core: "gbc", cover: getCover("Star baseball2001") },
+      { title: "043 National Tennis2000", rom: "044.National Tennis2000.gbc", core: "gbc", cover: getCover("National Tennis2000") },
+      { title: "044 Monster farm", rom: "045.Monster farm.gbc", core: "gbc", cover: getCover("Monster farm") },
+      { title: "045 Warriors", rom: "046.Warriors.gbc", core: "gbc", cover: getCover("Warriors") },
+      { title: "046 Toy soldier2", rom: "047.Toy soldier2.gbc", core: "gbc", cover: getCover("Toy soldier2") },
+      { title: "047 Billionaire", rom: "048.Billionaire.gbc", core: "gbc", cover: getCover("Billionaire") },
+      { title: "048 Toy soldier-hero2", rom: "049.Toy soldier-hero2.gbc", core: "gbc", cover: getCover("Toy soldier-hero2") },
+      { title: "049 Brave new world-independence", rom: "050.Brave new world-independence.gbc", core: "gbc", cover: getCover("Brave new world-independence") },
+      { title: "050 Atlantis-The Lost Empire", rom: "051.Atlantis-The Lost Empire.gbc", core: "gbc", cover: getCover("Atlantis-The Lost Empire") },
+      { title: "051 Austin Regime", rom: "052.Austin Regime.gbc", core: "gbc", cover: getCover("Austin Regime") },
+      { title: "052 Magic tower3", rom: "053.Magic tower3.gbc", core: "gbc", cover: getCover("Magic tower3") },
+      { title: "053 Barbie pet rescue", rom: "054.Barbie pet rescue.gbc", core: "gbc", cover: getCover("Barbie pet rescue") },
+
+      // --- Page 3 ---
+      { title: "054 Impossible mission", rom: "055.Impossible mission.gbc", core: "gbc", cover: getCover("Impossible mission") },
+      { title: "055 The Return of Batman Joker", rom: "056.The Return of Batman Joker.gbc", core: "gbc", cover: getCover("The Return of Batman Joker") },
+      { title: "056 Battle of Way Island in 1942", rom: "057.Battle of Way Island in 1942.gbc", core: "gbc", cover: getCover("Battle of Way Island in 1942") },
+      { title: "057 Battle city", rom: "058.Battle city.gbc", core: "gbc", cover: getCover("Battle city") },
+      { title: "058 Next-generation gyro war", rom: "059.Next-generation gyro war.gbc", core: "gbc", cover: getCover("Next-generation gyro war") },
+      { title: "059 Steel blade hockey", rom: "060.Steel blade hockey.gbc", core: "gbc", cover: getCover("Steel blade hockey") },
+      { title: "060 Shock wave", rom: "061.Shock wave.gbc", core: "gbc", cover: getCover("Shock wave") },
+      { title: "061 Hunter Girl Buffy-magic Shock", rom: "062.Hunter Girl Buffy-magic Shock.gbc", core: "gbc", cover: getCover("Hunter Girl Buffy-magic Shock") },
+      { title: "062 Crazy castle 3", rom: "063.Crazy castle 3.gbc", core: "gbc", cover: getCover("Crazy castle 3") },
+      { title: "063 Crazy castle 4", rom: "064.Crazy castle 4.gbc", core: "gbc", cover: getCover("Crazy castle 4") },
+      { title: "064 mission", rom: "065.mission.gbc", core: "gbc", cover: getCover("mission") },
+      { title: "065 Camarguedon4", rom: "066.Camarguedon4.gbc", core: "gbc", cover: getCover("Camarguedon4") },
+      { title: "066 Agile order", rom: "067.Agile order.gbc", core: "gbc", cover: getCover("Agile order") },
+      { title: "067 Micro machine 3", rom: "068.Micro machine 3.gbc", core: "gbc", cover: getCover("Micro machine 3") },
+      { title: "068 Super Hot Wheels", rom: "069.Super Hot Wheels.gbc", core: "gbc", cover: getCover("Super Hot Wheels") },
+      { title: "069 Black person 2", rom: "070.Black person 2.gbc", core: "gbc", cover: getCover("Black person 2") },
+      { title: "070 John Martin Football 2000", rom: "071.John Martin Football 2000.gbc", core: "gbc", cover: getCover("John Martin Football 2000") },
+      { title: "071 Duffy crow-get rich", rom: "072.Duffy crow-get rich.gbc", core: "gbc", cover: getCover("Duffy crow-get rich") },
+      { title: "072 Legend appears", rom: "073.Legend appears.gbc", core: "gbc", cover: getCover("Legend appears") },
+      { title: "073 dinosaur", rom: "074.dinosaur.gbc", core: "gbc", cover: getCover("dinosaur") },
+      { title: "074 leye racing", rom: "075.leye racing.gbc", core: "gbc", cover: getCover("leye racing") },
+      { title: "075 Kawano Kiri 2", rom: "076.Kawano Kiri 2.gbc", core: "gbc", cover: getCover("Kawano Kiri 2") },
+      { title: "076 Duke of Destruction 5", rom: "077.Duke of Destruction 5.gbc", core: "gbc", cover: getCover("Duke of Destruction 5") },
+      { title: "077 Earth destruction 2", rom: "078.Earth destruction 2.gbc", core: "gbc", cover: getCover("Earth destruction 2") },
+      { title: "078 Magic Hero 22", rom: "079.Magic Hero 22.gbc", core: "gbc", cover: getCover("Magic Hero 22") },
+      { title: "079 Road Frog", rom: "080.Road Frog.gbc", core: "gbc", cover: getCover("Road Frog") },
+      { title: "084 3-D Ultra Pinball - Thrillride", rom: "085.3-D Ultra Pinball.gbc", core: "gbc", cover: getCover("3-D Ultra Pinball - Thrillride") },
+
+      // --- Page 4 ---
+      { title: "085 All Star Tennis 2000", rom: "086.All Star Tennis 2000.gbc", core: "gbc", cover: getCover("All Star Tennis 2000") },
+      { title: "086.Bomberman Max - Blue Champion", rom: "087.Bomberman Max - Blue Champion.gbc", core: "gbc", cover: getCover("Bomberman Max - Blue Champion") },
+      { title: "087.Bomberman Max - Red Challenger", rom: "088.Bomberman Max - Red Challenger.gbc", core: "gbc", cover: getCover("Bomberman Max - Red Challenger") },
+      { title: "088.Pokemon Pinball", rom: "089.Pokemon Pinball.gbc", core: "gbc", cover: getCover("Pokemon Pinball") },
+      { title: "089.Donkey Kong Country", rom: "090.Donkey Kong Country.gbc", core: "gbc", cover: getCover("Donkey Kong Country") },
+      { title: "090.Super Mario Bros. Deluxe", rom: "091.Super Mario Bros. Deluxe.gbc", core: "gbc", cover: getCover("Super Mario Bros. Deluxe") },
+      { title: "091.Street Fighter Alpha - Warriors Dream", rom: "092.Street Fighter Alpha.gbc", core: "gbc", cover: getCover("Street Fighter Alpha - Warriors Dream") },
+      { title: "092.Legend of Zelda, The - Link's Awakening", rom: "093.Legend of Zelda - Link's Awakening.gbc", core: "gbc", cover: getCover("Legend of Zelda - Link's Awakening") },
+      { title: "093.Mario Golf", rom: "094.Mario Golf.gbc", core: "gbc", cover: getCover("Mario Golf") },
+      { title: "094.Mario Tennis", rom: "095.Mario Tennis.gbc", core: "gbc", cover: getCover("Mario Tennis") },
+      { title: "095.Mega Man Xtreme", rom: "096.Mega Man Xtreme.gbc", core: "gbc", cover: getCover("Mega Man Xtreme") },
+      { title: "096.Mega Man Xtreme 2", rom: "097.Mega Man Xtreme 2.gbc", core: "gbc", cover: getCover("Mega Man Xtreme 2") },
+      { title: "102 Dalmatian - Puppies to the Rescue", rom: "098.102 Dalmatian - Puppies to the Rescue.gbc", core: "gbc", cover: getCover("102 Dalmatian - Puppies to the Rescue") },
+      { title: "720 Degrees (U)", rom: "099.720 Degrees.gbc", core: "gbc", cover: getCover("720 Degrees") },
+      { title: "1704. 102 Dalmatians a la Rescousse", rom: "100.102 Dalmatians a la Rescousse.gbc", core: "gbc", cover: getCover("102 Dalmatians a la Rescousse") },
+      { title: "1705. 1942", rom: "101.1942.gbc", core: "gbc", cover: getCover("1942") },
+      { title: "1706. Action Man - Search for Base X", rom: "102.Action Man - Search for Base X.gbc", core: "gbc", cover: getCover("Action Man - Search for Base X") },
+      { title: "1707.Adventures of the Smurfs", rom: "103.Adventures of the Smurfs.gbc", core: "gbc", cover: getCover("Adventures of the Smurfs") },
+      { title: "1708.Scooby-Doo! - Classic Creep Capers", rom: "104.Scooby-Doo! - Classic Creep Capers.gbc", core: "gbc", cover: getCover("Scooby-Doo! - Classic Creep Capers") },
+      { title: "1709.Aladdin", rom: "105.Aladdin.gbc", core: "gbc", cover: getCover("Aladdin") },
+      { title: "1710.Alice in Wonderland", rom: "106.Alice in Wonderland.gbc", core: "gbc", cover: getCover("Alice in Wonderland") },
+      { title: "1711.Aliens - Thanatos Encounter", rom: "107.Aliens - Thanatos Encounter.gbc", core: "gbc", cover: getCover("Aliens - Thanatos Encounter") },
+      { title: "1712.3D Pocket Pool", rom: "108.3D Pocket Pool.gbc", core: "gbc", cover: getCover("3D Pocket Pool") },
+      { title: "1713.All-Star Baseball 2000", rom: "109.All-Star Baseball 2000.gbc", core: "gbc", cover: getCover("All-Star Baseball 2000") },
+      { title: "1714.All-Star Baseball 2001", rom: "110.All-Star Baseball 2001.gbc", core: "gbc", cover: getCover("All-Star Baseball 2001") },
+      { title: "1715.Alone in the Dark - The New Nightmare", rom: "111.Alone in the Dark - The New Nightmare.gbc", core: "gbc", cover: getCover("Alone in the Dark - The New Nightmare") },
+      { title: "1716.Animorphs", rom: "112.Animorphs.gbc", core: "gbc", cover: getCover("Animorphs") },
+
+      // --- Page 5 ---
+      { title: "1717.Antz Racing", rom: "113.Antz Racing.gbc", core: "gbc", cover: getCover("Antz Racing") },
+      { title: "1718.Army Men - Air Combat", rom: "114.Army Men - Air Combat.gbc", core: "gbc", cover: getCover("Army Men - Air Combat") },
+      { title: "1719.Army Men - Sarge's Heroes 2", rom: "115.Army Men - Sarge's Heroes 2.gbc", core: "gbc", cover: getCover("Army Men - Sarge's Heroes 2") },
+      { title: "1720.Army Men", rom: "116.Army Men.gbc", core: "gbc", cover: getCover("Army Men") },
+      { title: "1721.Army Men 2", rom: "117.Army Men 2.gbc", core: "gbc", cover: getCover("Army Men 2") },
+      { title: "1722.Asteroids", rom: "118.Asteroids.gbc", core: "gbc", cover: getCover("Asteroids") },
+      { title: "1723.Roswell Conspiracies - Aliens, Myths", rom: "119.Roswell Conspiracies - Aliens, Myths.gbc", core: "gbc", cover: getCover("Roswell Conspiracies - Aliens, Myths") },
+      { title: "1724.Barbie - Chasse au Tresor Sous-m", rom: "120.Barbie - Chasse au Tresor Sous-m.gbc", core: "gbc", cover: getCover("Barbie - Chasse au Tresor Sous-m") },
+      { title: "1725.Barbie - Fashion Pack Games", rom: "121.Barbie - Fashion Pack Games.gbc", core: "gbc", cover: getCover("Barbie - Fashion Pack Games") },
+      { title: "1726.Barbie - Magic Genie Adventure", rom: "122.Barbie - Magic Genie Adventure.gbc", core: "gbc", cover: getCover("Barbie - Magic Genie Adventure") },
+      { title: "1727.Barbie - Meeresabenteuer", rom: "123.Barbie - Meeresabenteuer.gbc", core: "gbc", cover: getCover("Barbie - Meeresabenteuer") },
+      { title: "1728.Barbie - Ocean Discovery", rom: "124.Barbie - Ocean Discovery.gbc", core: "gbc", cover: getCover("Barbie - Ocean Discovery") },
+      { title: "1729.Barbie - Pet Rescue", rom: "125.Barbie - Pet Rescue.gbc", core: "gbc", cover: getCover("Barbie - Pet Rescue") },
+      { title: "1730.Batman Beyond - Return of the Jok", rom: "126.Batman Beyond - Return of the Jok.gbc", core: "gbc", cover: getCover("Batman Beyond - Return of the Jok") },
+      { title: "1731.Batman of the Future - Return of th", rom: "127.Batman of the Future - Return of th.gbc", core: "gbc", cover: getCover("Batman of the Future - Return of th") },
+      { title: "1732.Robopon - Sun Version", rom: "128.Robopon - Sun Version.gbc", core: "gbc", cover: getCover("Robopon - Sun Version") },
+      { title: "1733.Battleship", rom: "129.Battleship.gbc", core: "gbc", cover: getCover("Battleship") },
+      { title: "1734.Resident Evil Gaiden", rom: "130.Resident Evil Gaiden.gbc", core: "gbc", cover: getCover("Resident Evil Gaiden") },
+      { title: "1735.Blade", rom: "131.Blade.gbc", core: "gbc", cover: getCover("Blade") },
+      { title: "1736.Pokemon Trading Card Game", rom: "132.Pokemon Trading Card Game.gbc", core: "gbc", cover: getCover("Pokemon Trading Card Game") },
+      { title: "1737.102 Dalmatians - Puppies to the Re", rom: "133.102 Dalmatians - Puppies to the Re.gbc", core: "gbc", cover: getCover("102 Dalmatians - Puppies to the Re") },
+      { title: "1738.Pokemon Puzzle Challenge", rom: "134.Pokemon Puzzle Challenge.gbc", core: "gbc", cover: getCover("Pokemon Puzzle Challenge") },
+      { title: "1739.Shanatae", rom: "135.Shanatae.gbc", core: "gbc", cover: getCover("Shanatae") },
+      { title: "1740.Hot Wheels - Stunt Track Driver", rom: "136.Hot Wheels - Stunt Track Driver.gbc", core: "gbc", cover: getCover("Hot Wheels - Stunt Track Driver") },
+      { title: "1741.Bubble Bobble", rom: "137.Bubble Bobble.gbc", core: "gbc", cover: getCover("Bubble Bobble") },
+      { title: "1742.Burger Burger Pocket", rom: "138.Burger Burger Pocket.gbc", core: "gbc", cover: getCover("Burger Burger Pocket") },
+      { title: "1743.Burger Paradise", rom: "139.Burger Paradise.gbc", core: "gbc", cover: getCover("Burger Paradise") },
+
+      // --- Page 6 ---
+      { title: "1744.Centipede", rom: "140.Centipede.gbc", core: "gbc", cover: getCover("Centipede") },
+      { title: "1745.Simpsons, The - Night of the Living", rom: "141.Simpsons, The - Night of the Living.gbc", core: "gbc", cover: getCover("Simpsons, The - Night of the Living") },
+      { title: "1746.Conker's Pocket Tales", rom: "142.Conker's Pocket Tales.gbc", core: "gbc", cover: getCover("Conker's Pocket Tales") },
+      { title: "1747.Croc 2", rom: "143.Croc 2.gbc", core: "gbc", cover: getCover("Croc 2") },
+      { title: "1748.Dinosaur", rom: "144.Dinosaur.gbc", core: "gbc", cover: getCover("Dinosaur") },
+      { title: "1749.Disney's Tarzan", rom: "145.Disney's Tarzan.gbc", core: "gbc", cover: getCover("Disney's Tarzan") },
+      { title: "1750.Tomb Raider - Curse of the Sword", rom: "146.Tomb Raider - Curse of the Sword.gbc", core: "gbc", cover: getCover("Tomb Raider - Curse of the Sword") },
+      { title: "1751.Pokemon Diamond", rom: "147.Pokemon Diamond.gbc", core: "gbc", cover: getCover("Pokemon Diamond") },
+      { title: "1752.Tetris DX", rom: "148.Tetris DX.gbc", core: "gbc", cover: getCover("Tetris DX") },
+      { title: "1753.Tetris Adventure - Susume Mickey", rom: "149.Tetris Adventure - Susume Mickey.gbc", core: "gbc", cover: getCover("Tetris Adventure - Susume Mickey") },
+      { title: "1754.Dragon Ball Z - Guerreros de Leyen", rom: "150.Dragon Ball Z - Guerreros de Leyen.gbc", core: "gbc", cover: getCover("Dragon Ball Z - Guerreros de Leyen") },
+      { title: "1755.Dragon Ball Z - Legendary Super", rom: "151.Dragon Ball Z - Legendary Super.gbc", core: "gbc", cover: getCover("Dragon Ball Z - Legendary Super") },
+      { title: "1756.Pokemon - Yellow Version", rom: "152.Pokemon - Yellow Version.gbc", core: "gbc", cover: getCover("Pokemon - Yellow Version") },
+      { title: "1757.Pokemon - Silver Version", rom: "153.Pokemon - Silver Version.gbc", core: "gbc", cover: getCover("Pokemon - Silver Version") },
+      { title: "1758.SpongeBob SquarePants - Legend", rom: "154.SpongeBob SquarePants - Legend.gbc", core: "gbc", cover: getCover("SpongeBob SquarePants - Legend") },
+      { title: "1759.Dragon Warrior I & II", rom: "155.Dragon Warrior I & II.gbc", core: "gbc", cover: getCover("Dragon Warrior I & II") },
+      { title: "1760.Dragon Warrior III", rom: "156.Dragon Warrior III.gbc", core: "gbc", cover: getCover("Dragon Warrior III") },
+      { title: "1761.Dragon Warrior Monsters", rom: "157.Dragon Warrior Monsters.gbc", core: "gbc", cover: getCover("Dragon Warrior Monsters") },
+      { title: "1762.Dragon Warrior Monsters 2 - Cobi's", rom: "158.Dragon Warrior Monsters 2 - Cobi's.gbc", core: "gbc", cover: getCover("Dragon Warrior Monsters 2 - Cobi's") },
+      { title: "1763.Dragon Warrior Monsters 2 - Tara's", rom: "159.Dragon Warrior Monsters 2 - Tara's.gbc", core: "gbc", cover: getCover("Dragon Warrior Monsters 2 - Tara's") },
+      { title: "1764.Duke Nukem", rom: "160.Duke Nukem.gbc", core: "gbc", cover: getCover("Duke Nukem") },
+      { title: "1765.F-1 Racing Championship", rom: "161.F-1 Racing Championship.gbc", core: "gbc", cover: getCover("F-1 Racing Championship") },
+      { title: "1766.FIFA 2000", rom: "162.FIFA 2000.gbc", core: "gbc", cover: getCover("FIFA 2000") },
+      { title: "1767.Flintstones, The - Burgertime in Be", rom: "163.Flintstones, The - Burgertime in Be.gbc", core: "gbc", cover: getCover("Flintstones, The - Burgertime in Be") },
+      { title: "1768.Front Row.gbc", rom: "164.Front Row.gbc", core: "gbc", cover: getCover("Front Row") },
+      { title: "1769.Galaga - Destination Earth", rom: "165.Galaga - Destination Earth.gbc", core: "gbc", cover: getCover("Galaga - Destination Earth") },
+      { title: "1770.Ghosts 'N Goblins", rom: "166.Ghosts 'N Goblins.gbc", core: "gbc", cover: getCover("Ghosts 'N Goblins") },
+
+      // --- Page 7 ---
+      { title: "1771.Godzilla - The Series - Monster War", rom: "167.Godzilla - The Series - Monster War.gbc", core: "gbc", cover: getCover("Godzilla - The Series - Monster War") },
+      { title: "1772.Grand Theft Auto", rom: "168.Grand Theft Auto.gbc", core: "gbc", cover: getCover("Grand Theft Auto") },
+      { title: "1773.Grand Theft Auto 2", rom: "169.Grand Theft Auto 2.gbc", core: "gbc", cover: getCover("Grand Theft Auto 2") },
+      { title: "1774.Hamtaros - Ham-Hams Unite", rom: "170.Hamtaros - Ham-Hams Unite.gbc", core: "gbc", cover: getCover("Hamtaros - Ham-Hams Unite") },
+      { title: "1775.Harry Potter and The Chamber of S", rom: "171.Harry Potter and The Chamber of S.gbc", core: "gbc", cover: getCover("Harry Potter and The Chamber of S") },
+      { title: "1776.Harry Potter and The Sorcerer's St", rom: "172.Harry Potter and The Sorcerer's St.gbc", core: "gbc", cover: getCover("Harry Potter and The Sorcerer's St") },
+      { title: "1777.Harry Potter to Kenja no Ishi", rom: "173.Harry Potter to Kenja no Ishi.gbc", core: "gbc", cover: getCover("Harry Potter to Kenja no Ishi") },
+      { title: "1778.Harvest Moon 2 GBC", rom: "174.Harvest Moon 2 GBC.gbc", core: "gbc", cover: getCover("Harvest Moon 2 GBC") },
+      { title: "1779.Harvest Moon 3 GBC", rom: "175.Harvest Moon 3 GBC.gbc", core: "gbc", cover: getCover("Harvest Moon 3 GBC") },
+      { title: "1780.Yu-Gi-Oh! Dark Duel Stories", rom: "176.Yu-Gi-Oh! Dark Duel Stories.gbc", core: "gbc", cover: getCover("Yu-Gi-Oh! Dark Duel Stories") },
+      { title: "1781.Pokemon - Gold Version", rom: "177.Pokemon - Gold Version.gbc", core: "gbc", cover: getCover("Pokemon - Gold Version") },
+      { title: "1782.Tintin in Tibet", rom: "178.Tintin in Tibet.gbc", core: "gbc", cover: getCover("Tintin in Tibet") },
+      { title: "1783.Toy Story 2", rom: "179.Toy Story 2.gbc", core: "gbc", cover: getCover("Toy Story 2") },
+      { title: "1784.Lion King, The - Simba's Mighty Ad", rom: "180.Lion King, The - Simba's Mighty Ad.gbc", core: "gbc", cover: getCover("Lion King, The - Simba's Mighty Ad") },
+      { title: "1785.Magical Tetris Challenge", rom: "181.Magical Tetris Challenge.gbc", core: "gbc", cover: getCover("Magical Tetris Challenge") },
+      { title: "1786.Mission Impossible", rom: "182.Mission Impossible.gbc", core: "gbc", cover: getCover("Mission Impossible") },
+      { title: "1787.Mortal Kombat 4", rom: "183.Mortal Kombat 4.gbc", core: "gbc", cover: getCover("Mortal Kombat 4") },
+      { title: "1788.Mr. Driller", rom: "184.Mr. Driller.gbc", core: "gbc", cover: getCover("Mr. Driller") },
+      { title: "1789.NHL Blades of Steel", rom: "185.NHL Blades of Steel.gbc", core: "gbc", cover: getCover("NHL Blades of Steel") }
+    ];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const romFile = urlParams.get('rom');
+    const coreName = urlParams.get('core') || 'gbc';
+    const gameTitle = urlParams.get('title') || 'GBC Game';
+
+    if (romFile) {
+      document.getElementById('games-menu').style.display = 'none';
+      document.getElementById('search').style.display = 'none';
+      document.getElementById('emulator-container').style.display = 'block';
+      document.getElementById('back-btn').style.display = 'inline-block';
+      document.getElementById('page-title').innerText = gameTitle;
+
+      EJS_player = '#game';
+      EJS_core = coreName;
+      EJS_gameUrl = romFile;
+      EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+
+      const script = document.createElement('script');
+      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+      document.body.appendChild(script);
+    } else {
+      renderGames(GBC_LIST);
+    }
+
+    function renderGames(list) {
+      const menuContainer = document.getElementById('games-menu');
+      menuContainer.innerHTML = '';
+      
+      list.forEach(game => {
+        const card = document.createElement('a');
+        card.className = 'game-card';
+        card.href = `?rom=${encodeURIComponent(game.rom)}&core=${encodeURIComponent(game.core)}&title=${encodeURIComponent(game.title)}`;
+        
+        card.innerHTML = `
+          <div class="img-container">
+            <div class="fallback-title">${game.title}</div>
+            <img src="${game.cover}" alt="${game.title}" loading="lazy" onerror="this.classList.add('img-error')">
+          </div>
+          <div class="title">${game.title}</div>
+        `;
+        
+        menuContainer.appendChild(card);
+      });
+    }
+
+    function filterGames() {
+      const query = document.getElementById('search').value.toLowerCase();
+      const filtered = GBC_LIST.filter(g => g.title.toLowerCase().includes(query) || g.rom.toLowerCase().includes(query));
+      renderGames(filtered);
+    }
+  </script>
 
 </body>
 </html>
